@@ -1,0 +1,134 @@
+> # Podpunkt a)
+> a <- 5/4^3
+> b <- 2 * a
+> if (a < b) {
++   print("a jest mniejsze")
++ } else {
++   print("a jest większe lub równe")
++ }
+[1] "a jest mniejsze"
+> # Podpunkt b)
+> ?min
+> # Podpunkt c)
+> a <- 50:75
+> srednia_kwadratow <- mean(a^2)
+> print(srednia_kwadratow)
+[1] 3962.5
+> # Podpunkt d)
+> apropos("min")
+ [1] ".rs.api.terminalActivate"                ".rs.api.terminalBuffer"                 
+ [3] ".rs.api.terminalBusy"                    ".rs.api.terminalClear"                  
+ [5] ".rs.api.terminalContext"                 ".rs.api.terminalCreate"                 
+ [7] ".rs.api.terminalExecute"                 ".rs.api.terminalExitCode"               
+ [9] ".rs.api.terminalKill"                    ".rs.api.terminalList"                   
+[11] ".rs.api.terminalRunning"                 ".rs.api.terminalSend"                   
+[13] ".rs.api.terminalVisible"                 ".rs.create_terminal_cursor_rules"       
+[15] ".rs.create_terminal_rule"                ".rs.create_terminal_viewport_rule"      
+[17] ".rs.explorer.callCustomInspector"        ".rs.isSystemInterpreter"                
+[19] ".rs.python.findPythonSystemInterpreters" ".rs.quarto.terminatePreview"            
+[21] ".rs.setUsingMingwGcc49"                  "cummin"                                 
+[23] "determinant"                             "determinant.matrix"                     
+[25] "min"                                     "nlminb"                                 
+[27] "pmin"                                    "pmin.int"                               
+[29] "which.min"                              
+> # Podpunkt e)
+> setwd("G:/Mój dysk/InformatykaMGR 2024 2025/3. Lista Przedmiotów - 1 semestr/7. APU [E] Analiza procesów uczenia/1. Laboratoria/1. 23.02 - 1 sprawko/Sprawko1Gracjan/skrypt")
+> a <- "aparat z wymienna optyką"
+> save(a, file="SkryptPodpunktE.Rdata")
+> rm(a)
+> print(a)
+BŁĄD: nie znaleziono obiektu 'a'
+> load("SkryptPodpunktE.Rdata")
+> print(a)
+[1] "aparat z wymienna optyką"
+> # Podpunkt f)
+> install.packages("gridExtra")
+WARNING: Rtools is required to build R packages but is not currently installed. Please download and install the appropriate version of Rtools before proceeding:
+
+https://cran.rstudio.com/bin/windows/Rtools/
+próbowanie adresu URL 'https://cran.rstudio.com/bin/windows/contrib/4.3/gridExtra_2.3.zip'
+Content type 'application/zip' length 1109440 bytes (1.1 MB)
+downloaded 1.1 MB
+
+pakiet ‘gridExtra’ został pomyślnie rozpakowany oraz sumy MD5 zostały sprawdzone
+
+Pobrane pakiety binarne są w
+	C:\Users\firei\AppData\Local\Temp\Rtmpkpab21\downloaded_packages
+> library(gridExtra)
+> grid.table(head(Seatbelts, 10))
+> # Podpunkt g)
+> a <- seq(1000, 800, by=-5)
+> # Podpunkt h)
+> a <- 29:5
+> b <- 21:33
+> d <- c(b, a)
+> print(d)
+ [1] 21 22 23 24 25 26 27 28 29 30 31 32 33 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10  9  8  7  6  5
+> # Podpunkt i)
+> nazwa <- c("aparat1", "aparat2", "aparat3", "aparat4", "aparat5", "aparat6", "aparat7", "aparat8", "aparat9", "aparat10")
+> rozdzielczosc <- c(1, 2, 3, 4, 5, 10, 15, 20, 25, 30)
+> zakres_czu_losci <- c(100, 150, 200, 250, 300, 10, 20, 30, 40, 50)
+> cena <- c(500, 600, 700, 800, 900, 1000, 100, 200, 300, 400)
+> liczba_opinii <- c(50, 60, 70, 80, 90, 100, 2, 3, 4, 5)
+> aparaty <- data.frame(nazwa, rozdzielczosc, zakres_czu_losci, cena, liczba_opinii)
+> mean(aparaty$cena)
+[1] 550
+> # Podpunkt j)
+> nowy_aparat <- data.frame(nazwa = "nowy_aparat", rozdzielczosc = 10, zakres_czu_losci = 100, cena = 1000, liczba_opinii = 10000)
+> aparaty <- rbind(aparaty, nowy_aparat)
+> mean(aparaty$cena)
+[1] 590.9091
+> # Podpunkt k)
+> aparaty$ocena_klientow <- seq(0, 5, by=0.5)
+> aparaty$ocena_klientow <- as.factor(aparaty$ocena_klientow)
+> srednia_cena_ocena <- tapply(aparaty$cena, aparaty$ocena_klientow, mean)
+> print(srednia_cena_ocena)
+   0  0.5    1  1.5    2  2.5    3  3.5    4  4.5    5 
+ 500  600  700  800  900 1000  100  200  300  400 1000 
+> # Podpunkt l)
+> nowe_aparaty <- data.frame(nazwa = c("aparat11", "aparat12", "aparat13", "aparat14"), 
++                            rozdzielczosc = c(11, 12, 13, 14), 
++                            zakres_czu_losci = c(100, 110, 120, 130), 
++                            cena = c(600, 700, 800, 900), 
++                            liczba_opinii = c(90, 100, 110, 120))
+> library(ggplot2)
+RStudio Community is a great place to get help: https://community.rstudio.com/c/tidyverse
+> ggplot(aparaty, aes(x=ocena_klientow)) +
++   geom_bar(stat="count")
+> # Podpunkt m)
+> pie(table(aparaty$ocena_klientow))
+> plot(table(aparaty$ocena_klientow))
+> # Podpunkt n)
+> aparaty$status_opinii <- cut(aparaty$liczba_opinii, breaks = c(-Inf, 0, 50, 100, Inf), labels = c("nie ma", "mniej 50 opinii", "50-100 opinii", "więcej 100 opinii"))
+> aparaty$status_opinii <- as.factor(aparaty$status_opinii)
+> pie(table(aparaty$status_opinii))
+> # Podpunkt o)
+> wyniki <- paste(aparaty$nazwa, " ma ocenę klientów ", aparaty$ocena_klientow,
++                 " bo ma liczbę opinii ", aparaty$liczba_opinii)
+> print(wyniki)
+ [1] "aparat1  ma ocenę klientów  0  bo ma liczbę opinii  50"       
+ [2] "aparat2  ma ocenę klientów  0.5  bo ma liczbę opinii  60"     
+ [3] "aparat3  ma ocenę klientów  1  bo ma liczbę opinii  70"       
+ [4] "aparat4  ma ocenę klientów  1.5  bo ma liczbę opinii  80"     
+ [5] "aparat5  ma ocenę klientów  2  bo ma liczbę opinii  90"       
+ [6] "aparat6  ma ocenę klientów  2.5  bo ma liczbę opinii  100"    
+ [7] "aparat7  ma ocenę klientów  3  bo ma liczbę opinii  2"        
+ [8] "aparat8  ma ocenę klientów  3.5  bo ma liczbę opinii  3"      
+ [9] "aparat9  ma ocenę klientów  4  bo ma liczbę opinii  4"        
+[10] "aparat10  ma ocenę klientów  4.5  bo ma liczbę opinii  5"     
+[11] "nowy_aparat  ma ocenę klientów  5  bo ma liczbę opinii  10000"
+> # Podpunkt p)
+> write.csv(aparaty, file = "aparaty.csv", row.names = FALSE)
+> read.csv("aparaty.csv")
+         nazwa rozdzielczosc zakres_czu_losci cena liczba_opinii ocena_klientow     status_opinii
+1      aparat1             1              100  500            50            0.0   mniej 50 opinii
+2      aparat2             2              150  600            60            0.5     50-100 opinii
+3      aparat3             3              200  700            70            1.0     50-100 opinii
+4      aparat4             4              250  800            80            1.5     50-100 opinii
+5      aparat5             5              300  900            90            2.0     50-100 opinii
+6      aparat6            10               10 1000           100            2.5     50-100 opinii
+7      aparat7            15               20  100             2            3.0   mniej 50 opinii
+8      aparat8            20               30  200             3            3.5   mniej 50 opinii
+9      aparat9            25               40  300             4            4.0   mniej 50 opinii
+10    aparat10            30               50  400             5            4.5   mniej 50 opinii
+11 nowy_aparat            10              100 1000         10000            5.0 więcej 100 opinii
