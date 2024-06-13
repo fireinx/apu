@@ -1,0 +1,151 @@
+> library(mlr)
+> library(dplyr)
+> library(ggplot2)
+> library(randomForest)
+> library(e1071)
+> library(nnet)
+> library(kernlab)
+> # Przygotowanie danych
+> nazwa <- c("aparat1", "aparat2", "aparat3", "aparat4", "aparat5", "aparat6", "aparat7", "aparat8", "aparat9", "aparat10", "aparat11", "aparat12")
+> rozdzielczosc <- c(20, 24, 18, 26, 30, 20, 22, 24, 26, 28, 32, 34)
+> zakres_czulosci <- c(100, 200, 100, 300, 200, 400, 100, 200, 300, 100, 200, 300)
+> cena <- c(5000, 6000, 5500, 7000, 7500, 8000, 8500, 9000, 6500, 6000, 7000, 8000)
+> liczba_opinii <- c(100, 200, 150, 300, 250, 400, 350, 450, 300, 200, 100, 150)
+> ocena_klientow <- c(4.5, 4.7, 4.2, 4.8, 4.9, 4.3, 4.6, 4.7, 4.1, 4.4, 4.6, 4.5)
+> data <- data.frame(rozdzielczosc, zakres_czulosci, cena, liczba_opinii, ocena_klientow)
+> # Zdefiniowanie zadania
+> regr_task <- makeRegrTask(id = "RTV_AGD_Prediction", data = data, target = "ocena_klientow")
+> # Wybór learnerów
+> learners <- list(
++   makeLearner("regr.lm"),
++   makeLearner("regr.randomForest"),
++   makeLearner("regr.ksvm"),
++   makeLearner("regr.nnet")
++ )
+> # Wykonanie benchmarkingu
+> rdesc <- makeResampleDesc("CV", iters = 5)
+> bmr <- benchmark(learners, regr_task, rdesc, measures = list(rmse))
+Task: RTV_AGD_Prediction, Learner: regr.lm
+Resampling: cross-validation
+Measures:             rmse      
+[Resample] iter 1:    0.2170085 
+[Resample] iter 2:    0.2927786 
+[Resample] iter 3:    0.4156848 
+[Resample] iter 4:    0.1439885 
+[Resample] iter 5:    0.2054658 
+
+
+Aggregated Result: rmse.test.rmse=0.2714976
+
+
+Task: RTV_AGD_Prediction, Learner: regr.randomForest
+Resampling: cross-validation
+Measures:             rmse      
+[Resample] iter 1:    0.2126418 
+[Resample] iter 2:    0.2299462 
+[Resample] iter 3:    0.4387199 
+[Resample] iter 4:    0.1729913 
+[Resample] iter 5:    0.2161349 
+
+
+Aggregated Result: rmse.test.rmse=0.2710008
+
+
+Task: RTV_AGD_Prediction, Learner: regr.ksvm
+Resampling: cross-validation
+Measures:             rmse      
+[Resample] iter 1:    0.2354755 
+[Resample] iter 2:    0.2300420 
+[Resample] iter 3:    0.4360895 
+[Resample] iter 4:    0.1722265 
+[Resample] iter 5:    0.2589848 
+
+
+Aggregated Result: rmse.test.rmse=0.2811680
+
+
+Task: RTV_AGD_Prediction, Learner: regr.nnet
+Resampling: cross-validation
+Measures:             rmse      
+# weights:  19
+initial  value 117.158908 
+final  value 0.569000 
+converged
+[Resample] iter 1:    0.2100000 
+# weights:  19
+initial  value 233.939318 
+final  value 0.548889 
+converged
+[Resample] iter 2:    0.1788164 
+# weights:  19
+initial  value 164.804843 
+final  value 0.321000 
+converged
+[Resample] iter 3:    0.4011234 
+# weights:  19
+initial  value 109.174061 
+final  value 0.580000 
+converged
+[Resample] iter 4:    0.1452966 
+# weights:  19
+initial  value 189.530784 
+final  value 0.524000 
+converged
+[Resample] iter 5:    0.2580698 
+
+
+Aggregated Result: rmse.test.rmse=0.2548279
+
+
+> # Wizualizacja wyników
+> # Boxplot
+> plotBMRBoxplots(bmr, style = "box") + ggtitle("Porównanie metod pod względem RMSE") + theme_bw(base_size = 16)
+> # Violin plot
+> plotBMRBoxplots(bmr, style = "violin") + ggtitle("Porównanie metod pod względem RMSE") + theme_bw(base_size = 16)
+Komunikaty ostrzegawcze:
+1: The `fun.y` argument of `stat_summary()` is deprecated as of ggplot2 3.3.0.
+ℹ Please use the `fun` argument instead.
+ℹ The deprecated feature was likely used in the mlr package.
+  Please report the issue at <https://github.com/mlr-org/mlr/issues>.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated. 
+2: The `fun.ymin` argument of `stat_summary()` is deprecated as of ggplot2 3.3.0.
+ℹ Please use the `fun.min` argument instead.
+ℹ The deprecated feature was likely used in the mlr package.
+  Please report the issue at <https://github.com/mlr-org/mlr/issues>.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated. 
+3: The `fun.ymax` argument of `stat_summary()` is deprecated as of ggplot2 3.3.0.
+ℹ Please use the `fun.max` argument instead.
+ℹ The deprecated feature was likely used in the mlr package.
+  Please report the issue at <https://github.com/mlr-org/mlr/issues>.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated. 
+> # Ranking
+> plotBMRRanksAsBarChart(bmr, pos = "stack") + ggtitle("Ranking metod") + theme_bw(base_size = 16)
+> # Uzyskanie wyników benchmarkingu
+> getBMRAggrPerformances(bmr)
+$RTV_AGD_Prediction
+$RTV_AGD_Prediction$regr.lm
+rmse.test.rmse 
+     0.2714976 
+
+$RTV_AGD_Prediction$regr.randomForest
+rmse.test.rmse 
+     0.2710008 
+
+$RTV_AGD_Prediction$regr.ksvm
+rmse.test.rmse 
+      0.281168 
+
+$RTV_AGD_Prediction$regr.nnet
+rmse.test.rmse 
+     0.2548279 
+
+
+> # Użycie wyników dla wizualizacji i analizy
+> perf <- getBMRPerformances(bmr, as.df = TRUE)
+> ggplot(perf, aes(x = learner.id, y = rmse, color = learner.id)) +
++   geom_boxplot() +
++   ggtitle("Porównanie RMSE różnych metod") +
++   theme_bw(base_size = 16)
